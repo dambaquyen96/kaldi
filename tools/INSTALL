@@ -30,3 +30,8 @@ build by supplying the "-j" option to make, e.g. to use 4 CPUs
 In extras/, there are also various scripts to install extra bits and pieces that
 are used by individual example scripts.  If an example script needs you to run
 one of those scripts, it will tell you what to do.
+
+# QUYENDB custom
+install hiredis & redis-c-cluster library:
+
+  ./install_redis.sh

@@ -1325,6 +1325,24 @@ if [ -n "$ENV_CXXFLAGS" ]; then echo "CXXFLAGS += $ENV_CXXFLAGS" >> kaldi.mk; fi
 if [ -n "$ENV_LDFLAGS" ]; then echo "LDFLAGS += $ENV_LDFLAGS" >> kaldi.mk; fi
 if [ -n "$ENV_LDLIBS" ]; then echo "LDLIBS += $ENV_LDLIBS" >> kaldi.mk; fi
 
+# QUYENDB
+HIREDIS=$(cd ..; pwd)/tools/hiredis
+if [ -d $HIREDIS/include ] && [ -d $HIREDIS/lib ] && [ -f $HIREDIS/lib/libhiredis.so ]; then
+  echo "CXXFLAGS += -I$HIREDIS/include" >> kaldi.mk
+  echo "LDFLAGS += -Wl,-rpath=$HIREDIS/lib" >> kaldi.mk
+  echo "LDLIBS += $HIREDIS/lib/libhiredis.so" >> kaldi.mk
+else 
+  failure "Fail to configure tools $HIREDIS."
+fi
+
+REDISCLUSTER=$(cd ..; pwd)/tools/redis-c-cluster
+if [ -f $REDISCLUSTER/lib/libredis_cluster.so ]; then
+  echo "LDLIBS += $REDISCLUSTER/lib/libredis_cluster.so" >> kaldi.mk
+else
+  failure "Fail to configure tools $REDISCLUSTER."
+fi 
+# END QUYENDB
+
 # We check for slow exp implementation just before we exit. This check uses
 # and possibly modifies the kaldi.mk file that we just generated.
 check_for_slow_expf;
