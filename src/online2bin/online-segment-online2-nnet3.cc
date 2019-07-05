@@ -51,7 +51,7 @@
 #include <ctime>
 #include <fcntl.h>
 #include <fstream>
-#include <hiredis.h>
+#include <hiredis/hiredis.h>
 #include <iostream>
 #include <netdb.h>
 #include <netinet/in.h>

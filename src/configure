@@ -1337,6 +1337,8 @@ fi
 
 REDISCLUSTER=$(cd ..; pwd)/tools/redis-c-cluster
 if [ -f $REDISCLUSTER/lib/libredis_cluster.so ]; then
+  echo "CXXFLAGS += -I$REDISCLUSTER/include" >> kaldi.mk
+  echo "LDFLAGS += -Wl,-rpath=$REDISCLUSTER/lib" >> kaldi.mk
   echo "LDLIBS += $REDISCLUSTER/lib/libredis_cluster.so" >> kaldi.mk
 else
   failure "Fail to configure tools $REDISCLUSTER."

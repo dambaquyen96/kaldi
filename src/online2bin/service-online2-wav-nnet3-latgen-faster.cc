@@ -37,7 +37,7 @@
 #include <ctime>
 #include <fcntl.h>
 #include <fstream>
-#include <hiredis.h>
+#include <hiredis/hiredis.h>
 #include <iostream>
 #include <netdb.h>
 #include <netinet/in.h>
@@ -235,6 +235,8 @@ int main(int argc, char *argv[]) {
     }
 
     while(1) {
+      std::string utt = "_temp";
+      std::string path = "_temp";
       try {
         commands.clear();
         commands.push_back("LLEN");
@@ -266,18 +268,20 @@ int main(int argc, char *argv[]) {
           std::cout << "Found " << s_index << " token, expected format <utt> <path> in: " << s_scp << std::endl;
           continue;
         }
-        std::string utt = arr_str[0];
-        std::string path = arr_str[1];
+        utt = arr_str[0];
+        path = arr_str[1];
 
         std::cout << "Processing: " << utt << std::endl;
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
         std::string wav_rspecifier = "scp:echo " + utt + " " + path + "|";
+
         RandomAccessTableReader<WaveHolder> wav_reader(wav_rspecifier);
         if(!wav_reader.HasKey(utt)){
           continue;
         }
         const WaveData &wave_data = wav_reader.Value(utt);
+
         SubVector<BaseFloat> data(wave_data.Data(), 0);
         BaseFloat wave_duration = wave_data.Duration();
 
@@ -362,6 +366,13 @@ int main(int argc, char *argv[]) {
 
       } catch (const std::exception& e) {
         std::cerr << e.what();
+        commands.clear();
+        commands.push_back("SET");
+        commands.push_back(utt);
+        commands.push_back("");
+        reply = cluster->run(commands);
+        freeReplyObject(reply);
+        std::cout << "------------------------------------------------" << std::endl;
         continue;
       }
     }
