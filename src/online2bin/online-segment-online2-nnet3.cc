@@ -231,7 +231,7 @@ int main(int argc, char *argv[]) {
     std::vector<std::string> v_start;
     std::vector<std::string> v_end;
     std::vector<std::string> v_sentence;
-	std::vector<BaseFloat> v_confidence;
+	  std::vector<BaseFloat> v_confidence;
 
     typedef kaldi::int32 int32;
     typedef kaldi::int64 int64;
@@ -267,7 +267,7 @@ int main(int argc, char *argv[]) {
     BaseFloat chunk_length_secs = 0.18;
     bool do_endpointing = false;
     bool online = true;
-	bool get_confidence = false;
+	  bool get_confidence = false;
 
     po.Register("s-max-active", &s_decoder_opts.max_active,
                 "Segment max active");

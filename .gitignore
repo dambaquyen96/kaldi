@@ -151,3 +151,4 @@ GSYMS
 /tools/python/
 /tools/hiredis/
 /tools/redis-c-cluster/
+.vscode
